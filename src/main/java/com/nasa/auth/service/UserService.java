@@ -33,15 +33,18 @@ public class UserService {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         return userMapper.toUserViewDto(userEntity.get());
     }
-    public UserView updateByID(Long id,User user){
-     Optional<UserEntity> userEntity = userRepository.findById(id);
-     if(userEntity.isPresent()){
-        user.setId(id);
-        UserEntity userResponse = userRepository.save(userMapper.toEntity(user));
-        return userMapper.toUserViewDto(userResponse);
-     }
-     else{
-         throw new RuntimeException("User Not Found");
-     }
+    public UserView updateByID(Long id,User user) {
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        if (userEntity.isPresent()) {
+            user.setId(id);
+            UserEntity userResponse = userRepository.save(userMapper.toEntity(user));
+            return userMapper.toUserViewDto(userResponse);
+        } else {
+            throw new RuntimeException("User Not Found");
+        }
+    }
+     public UserEntity findByUserName(String userName){
+         UserEntity userEntity = userRepository.findByEmail(userName);
+         return userEntity;
     }
 }
