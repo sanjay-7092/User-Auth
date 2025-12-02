@@ -3,6 +3,7 @@ package com.nasa.auth.service;
 import com.nasa.auth.DTO.User;
 import com.nasa.auth.DTO.UserView;
 import com.nasa.auth.Entity.UserEntity;
+import com.nasa.auth.Util.AuthUtil;
 import com.nasa.auth.mapper.UserMapper;
 import com.nasa.auth.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,17 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    UserService(UserRepository userRepository,UserMapper userMapper){
+    private final AuthUtil authUtil;
+    UserService(UserRepository userRepository, UserMapper userMapper, AuthUtil authUtil){
         this.userRepository=userRepository;
         this.userMapper=userMapper;
+        this.authUtil=authUtil;
     }
     public UserView signUp(User user){
-        UserEntity userEntity =  userMapper.toEntity(user);
-        return userMapper.toUserViewDto(userRepository.save(userEntity));
+        UserEntity newUser = userMapper.toEntity(user);
+        newUser.setPassword(authUtil.encode(newUser.getPassword()));
+        UserEntity userResponse = userRepository.save(newUser);
+        return userMapper.toUserViewDto(userResponse);
     }
 
     public List<UserView> getAllUsers(){
@@ -37,7 +42,9 @@ public class UserService {
         Optional<UserEntity> userEntity = userRepository.findById(id);
         if (userEntity.isPresent()) {
             user.setId(id);
-            UserEntity userResponse = userRepository.save(userMapper.toEntity(user));
+            UserEntity newUser = userMapper.toEntity(user);
+            newUser.setPassword(authUtil.encode(newUser.getPassword()));
+            UserEntity userResponse = userRepository.save(newUser);
             return userMapper.toUserViewDto(userResponse);
         } else {
             throw new RuntimeException("User Not Found");
