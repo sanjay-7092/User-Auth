@@ -28,4 +28,6 @@ public class UserEntity {
     private LocalDate dob;
     @Column(name="password")
     private String password;
+    @Column(name="active")
+    private Boolean isActive;
 }

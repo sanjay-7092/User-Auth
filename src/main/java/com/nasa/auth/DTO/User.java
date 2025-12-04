@@ -16,5 +16,6 @@ public class User {
     private String role;
     private LocalDate dob;
     private String password;
+    private Boolean isActive;
 
 }
