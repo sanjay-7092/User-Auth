@@ -16,12 +16,10 @@ public class UserController {
     UserController(UserService userService){
         this.userService=userService;
     }
-
     @PostMapping("/sign-up")
     public ResponseEntity<UserView> signUp(@RequestBody User user){
         return ResponseEntity.ok(userService.signUp(user));
     }
-
     @GetMapping
     public ResponseEntity<List<UserView>> getAllUsers(){
         List<UserView> response = userService.getAllUsers();

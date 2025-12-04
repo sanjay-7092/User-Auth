@@ -43,7 +43,7 @@ public class UserService {
         if (userEntity.isPresent()) {
             user.setId(id);
             UserEntity newUser = userMapper.toEntity(user);
-            newUser.setPassword(authUtil.encode(newUser.getPassword()));
+            newUser.setPassword(authUtil.encode(userEntity.get().getPassword()));
             UserEntity userResponse = userRepository.save(newUser);
             return userMapper.toUserViewDto(userResponse);
         } else {
