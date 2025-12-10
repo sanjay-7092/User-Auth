@@ -46,7 +46,7 @@ dependencies {
 	implementation 'org.flywaydb:flyway-mysql'
 
 	//own security
-	implementation 'com.nasa:security:0.0.1-SNAPSHOT'
+//	implementation 'com.nasa:security:0.0.1-SNAPSHOT'
 
 
 	//default while creating project from spring initializer
