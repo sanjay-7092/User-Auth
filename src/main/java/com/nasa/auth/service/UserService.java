@@ -6,13 +6,16 @@ import com.nasa.auth.Entity.UserEntity;
 import com.nasa.auth.Util.AuthUtil;
 import com.nasa.auth.mapper.UserMapper;
 import com.nasa.auth.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService{
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -53,5 +56,9 @@ public class UserService{
      public UserEntity findByUserName(String userName){
          UserEntity userEntity = userRepository.findByEmail(userName);
          return userEntity;
+    }
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.findByUserName(username);
     }
 }
