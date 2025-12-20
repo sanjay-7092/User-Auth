@@ -4,6 +4,7 @@ import com.nasa.auth.DTO.UserLogin;
 import com.nasa.auth.Entity.UserEntity;
 import com.nasa.auth.Util.AuthUtil;
 //import com.nasa.security.utils.JWTUtil;
+import com.nasa.auth.Util.JWTUtil;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,12 +23,11 @@ public class AuthService {
         if (userEntity != null) {
             boolean isPasswordMatches = authUtil.matches(userLogin.getPassword(), userEntity.getPassword());
             if (isPasswordMatches) {
-//                return JWTUtil.generateToken(userEntity.getEmail());
-                return "Succesful";
+                return JWTUtil.generateToken(userEntity.getEmail());
             }
-            return "Password Doesn't matches";
+            throw new RuntimeException("Password doesn't match");
         }
-    return "User not found";
+    throw new RuntimeException("User Not Found");
     }
 
 }

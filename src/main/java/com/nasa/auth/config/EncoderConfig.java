@@ -11,12 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class EncoderConfig {
 
     @Bean
-    @Primary
     public PasswordEncoder bCryptpasswordEncoder(){
         return new BCryptPasswordEncoder();
-    }
-    @Bean
-    public PasswordEncoder argo2PasswordEncoder(){
-        return new Argon2PasswordEncoder(5,5,5,5,5);
     }
 }
