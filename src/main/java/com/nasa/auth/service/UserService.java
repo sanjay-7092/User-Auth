@@ -3,9 +3,11 @@ package com.nasa.auth.service;
 import com.nasa.auth.DTO.User;
 import com.nasa.auth.DTO.UserView;
 import com.nasa.auth.Entity.UserEntity;
+import com.nasa.auth.Exception.InvalidUserExeption;
 import com.nasa.auth.Util.AuthUtil;
 import com.nasa.auth.mapper.UserMapper;
 import com.nasa.auth.repository.UserRepository;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,10 +25,23 @@ public class UserService{
         this.authUtil=authUtil;
     }
     public UserView signUp(User user){
-        UserEntity newUser = userMapper.toEntity(user);
-        newUser.setPassword(authUtil.encode(newUser.getPassword()));
-        UserEntity userResponse = userRepository.save(newUser);
-        return userMapper.toUserViewDto(userResponse);
+        try {
+            if(isValidUser(user)){
+                UserEntity newUser = userMapper.toEntity(user);
+                newUser.setPassword(authUtil.encode(newUser.getPassword()));
+                UserEntity userResponse = userRepository.save(newUser);
+                return userMapper.toUserViewDto(userResponse);
+            }else{
+                throw new InvalidUserExeption("Error While Creating User");
+            }
+        } catch(InvalidUserExeption ex){
+            throw new InvalidUserExeption("AUTH-USER-001");
+        }catch(Exception ex){
+            throw new InvalidUserExeption("Unable to create user : Contact Adminstrator");
+        }
+    }
+    private boolean isValidUser(User user){
+        return user.getEmail()!=null && user.getPassword()!=null && user.getFirstName()!=null;
     }
 
     public List<UserView> getAllUsers(){
