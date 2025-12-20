@@ -1,4 +1,4 @@
-package com.nasa.auth.Util;
+package com.nasa.auth.util;
 
 import javax.crypto.SecretKey;
 

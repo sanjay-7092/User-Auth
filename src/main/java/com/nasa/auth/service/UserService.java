@@ -4,10 +4,9 @@ import com.nasa.auth.DTO.User;
 import com.nasa.auth.DTO.UserView;
 import com.nasa.auth.Entity.UserEntity;
 import com.nasa.auth.Exception.InvalidUserExeption;
-import com.nasa.auth.Util.AuthUtil;
+import com.nasa.auth.util.AuthUtil;
 import com.nasa.auth.mapper.UserMapper;
 import com.nasa.auth.repository.UserRepository;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

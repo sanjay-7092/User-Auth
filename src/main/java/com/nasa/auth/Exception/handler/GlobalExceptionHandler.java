@@ -2,11 +2,13 @@ package com.nasa.auth.Exception.handler;
 
 import com.nasa.auth.DTO.ErrorResponse;
 import com.nasa.auth.Exception.BaseException;
+import com.nasa.auth.Exception.InvalidUserExeption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.Locale;
 
@@ -20,7 +22,7 @@ public class GlobalExceptionHandler {
         this.messageSource=messageSource;
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(InvalidUserExeption.class)
     public ErrorResponse handleInvalidUserException(BaseException baseException){
         return this.getErrorResponse(baseException);
     }

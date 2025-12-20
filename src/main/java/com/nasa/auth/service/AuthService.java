@@ -2,8 +2,8 @@ package com.nasa.auth.service;
 
 import com.nasa.auth.DTO.UserLogin;
 import com.nasa.auth.Entity.UserEntity;
-import com.nasa.auth.Util.AuthUtil;
-import com.nasa.auth.Util.JWTUtil;
+import com.nasa.auth.util.AuthUtil;
+import com.nasa.auth.util.JWTUtil;
 import org.springframework.stereotype.Service;
 
 @Service
