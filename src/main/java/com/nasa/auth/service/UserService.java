@@ -9,40 +9,47 @@ import com.nasa.auth.util.AuthUtil;
 import com.nasa.auth.mapper.UserMapper;
 import com.nasa.auth.repository.UserRepository;
 import com.nasa.auth.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserService{
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final AuthUtil authUtil;
-    UserService(UserRepository userRepository, UserMapper userMapper, AuthUtil authUtil){
+    UserService(UserRepository userRepository, UserMapper userMapper){
         this.userRepository=userRepository;
         this.userMapper=userMapper;
-        this.authUtil=authUtil;
     }
     public UserView signUp(User user){
         try {
+            log.info("Creating the user");
             if(isInValidUser(user)){
+                log.error("Required fields is missed for creating user");
                 throw new InvalidUserExeption("AUTH-USER-001");
             }else{
                 if(userRepository.findByEmail(user.getEmail()).isPresent()){
+                    log.error("User Already exist with this email : {}",user.getEmail());
                     throw new InvalidUserExeption("AUTH-USER-002");
                 }
                 if(!user.getPassword().equals(user.getConfirmPassword())){
+                    log.error("Password doesn't matches with confirm password");
                     throw new InvalidUserExeption("AUTH-USER-003");
                 }
                 UserEntity newUser = userMapper.toEntity(user);
-                newUser.setPassword(authUtil.encode(newUser.getPassword()));
+                newUser.setPassword(AuthUtil.encode(newUser.getPassword()));
                 UserEntity userResponse = userRepository.save(newUser);
+                log.info("User was successfully created");
                 return userMapper.toUserViewDto(userResponse);
             }
         } catch(InvalidUserExeption ex){
+            log.error("Error while creating User : {}",ex.getMessage());
             throw new InvalidUserExeption("Unable to create user : Contact Adminstrator",ex.getErrorCode());
         }catch(Exception ex){
+            log.error("Error while creating User : {}",ex.getMessage());
             throw new InvalidUserExeption("Unable to create user : Contact Adminstrator");
         }
     }
@@ -51,18 +58,22 @@ public class UserService{
     }
 
     public List<UserView> getAllUsers(){
+        log.info("Retreving the all users");
         List<UserEntity> userEntities = userRepository.findAll();
         if(userEntities.isEmpty()){
+            log.error("Users are empty");
             throw new InvalidUserExeption("AUTH-USER-005");
         }
         return userMapper.toAllUserViewDtos(userEntities);
     }
 
     public UserView getByUserId(Long id){
+        log.info("Fetching the user with the id : {}",id);
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->new InvalidUserExeption("AUTH-USER-004"));
         return userMapper.toUserViewDto(userEntity);
     }
     public UserView updateByID(Long id,User user) {
+            log.info("Updating the user with the id : {}",id);
             UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new InvalidUserExeption("AUTH-USER-004"));
             userEntity.setDob(user.getDob());
             userEntity.setEmail(user.getEmail());
@@ -72,19 +83,24 @@ public class UserService{
             userEntity.setFirstName(user.getFirstName());
             userEntity.setLastName(user.getLastName());
             UserEntity updated = userRepository.save(userEntity);
+            log.info("Successfully updated the user");
             return userMapper.toUserViewDto(updated);
     }
      public UserEntity findByUserName(String userName){
+         log.info("Fetch the user by email : {}",userName);
          return userRepository.findByEmail(userName).orElseThrow(() -> new InvalidUserExeption("User Not Found with the Email : {} "+ userName,""));
     }
 
     public void changePassword(UserSecure userSecure,Long id){
+        log.info("Changing the password for the user with the id : {}",id);
         UserEntity userEntity = userRepository.findById(id).orElseThrow(()->new InvalidUserExeption("AUTH-USER-004"));
         if(!AuthUtil.matches(userSecure.getCurrentPassword(),userEntity.getPassword())){
-           throw new InvalidUserExeption("AUTH-LOGIN-001");
+            log.error("current password doesn't matches");
+            throw new InvalidUserExeption("AUTH-LOGIN-001");
         }
         else{
             if(AuthUtil.matches(userSecure.getNewPassword(),userEntity.getPassword())){
+                log.error("New password must be diffrent from current password");
                 throw new InvalidUserExeption("New Password must be newer than old password","");
             }
             userEntity.setPassword(AuthUtil.encode(userSecure.getNewPassword()));
