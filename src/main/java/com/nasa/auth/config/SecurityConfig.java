@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(Customizer.withDefaults())
                 .csrf(csrf ->csrf.disable())
-                .authorizeHttpRequests(auth ->auth.requestMatchers("/login").permitAll()
+                .authorizeHttpRequests(auth ->auth.requestMatchers("/login","/actuator/**").permitAll()
                 .anyRequest().authenticated());
         return httpSecurity.build();
     }
