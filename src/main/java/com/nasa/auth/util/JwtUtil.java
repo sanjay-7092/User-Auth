@@ -4,6 +4,7 @@ import javax.crypto.SecretKey;
 
 import com.nasa.auth.Entity.UserEntity;
 import com.nasa.auth.service.UserService;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -12,7 +13,8 @@ import io.jsonwebtoken.Claims;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-public class JWTUtil {
+public final class JwtUtil {
+
 
     private static final String SECRET = "Nasa-super-secret-key-used-for-authentication";
     private static final SecretKey secretKey = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));

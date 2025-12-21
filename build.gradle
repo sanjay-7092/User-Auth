@@ -36,7 +36,6 @@ dependencies {
 	//security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
-
 	//lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -52,7 +51,6 @@ dependencies {
 
 	//own security
 //	implementation 'com.nasa:security:0.0.1-SNAPSHOT'
-
 
 	//default while creating project from spring initializer
 	implementation 'org.springframework.boot:spring-boot-starter'

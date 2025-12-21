@@ -1,7 +1,7 @@
 package com.nasa.auth.Filter;
 
 import com.nasa.auth.Entity.UserEntity;
-import com.nasa.auth.util.JWTUtil;
+import com.nasa.auth.util.JwtUtil;
 import com.nasa.auth.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,8 +26,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         String token = request.getHeader("Authorization");
         if(token!=null && SecurityContextHolder.getContext().getAuthentication()==null){
-            boolean validUser = JWTUtil.validateToken(token,userService);
-            String userName = JWTUtil.extractUserName(token);
+            boolean validUser = JwtUtil.validateToken(token,userService);
+            String userName = JwtUtil.extractUserName(token);
             UserEntity userEntity = userService.findByUserName(userName);
             if(validUser){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userEntity,null,null);

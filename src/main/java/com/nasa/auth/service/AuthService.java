@@ -2,8 +2,10 @@ package com.nasa.auth.service;
 
 import com.nasa.auth.DTO.UserLogin;
 import com.nasa.auth.Entity.UserEntity;
+import com.nasa.auth.Exception.InvalidUserExeption;
+import com.nasa.auth.Exception.UnAuthorizedAccessException;
 import com.nasa.auth.util.AuthUtil;
-import com.nasa.auth.util.JWTUtil;
+import com.nasa.auth.util.JwtUtil;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,15 +20,19 @@ public class AuthService {
     }
 
     public String login(UserLogin userLogin) {
-        UserEntity userEntity = userService.findByUserName(userLogin.getUserName());
-        if (userEntity != null) {
+        try {
+            UserEntity userEntity = userService.findByUserName(userLogin.getUserName());
             boolean isPasswordMatches = authUtil.matches(userLogin.getPassword(), userEntity.getPassword());
             if (isPasswordMatches) {
-                return JWTUtil.generateToken(userEntity.getEmail());
+                    return JwtUtil.generateToken(userEntity.getEmail());
+            }else{
+                throw new UnAuthorizedAccessException("AUTH-LOGIN-001");
             }
-            throw new RuntimeException("Password doesn't match");
+        }catch(InvalidUserExeption ex){
+            throw new InvalidUserExeption(ex.getErrorCode());
+        }catch(UnAuthorizedAccessException ex){
+            throw new UnAuthorizedAccessException(ex.getErrorCode());
         }
-    throw new RuntimeException("User Not Found");
     }
 
 }
