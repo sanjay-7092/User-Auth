@@ -22,7 +22,7 @@ public class AuthService {
     public String login(UserLogin userLogin) {
         try {
             UserEntity userEntity = userService.findByUserName(userLogin.getUserName());
-            boolean isPasswordMatches = authUtil.matches(userLogin.getPassword(), userEntity.getPassword());
+            boolean isPasswordMatches = AuthUtil.matches(userLogin.getPassword(), userEntity.getPassword());
             if (isPasswordMatches) {
                     return JwtUtil.generateToken(userEntity.getEmail());
             }else{

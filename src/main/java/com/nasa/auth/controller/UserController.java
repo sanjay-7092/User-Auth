@@ -1,8 +1,10 @@
 package com.nasa.auth.controller;
 
 import com.nasa.auth.DTO.User;
+import com.nasa.auth.DTO.UserSecure;
 import com.nasa.auth.DTO.UserView;
 import com.nasa.auth.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +19,7 @@ public class UserController {
         this.userService=userService;
     }
     @PostMapping("/sign-up")
-    public ResponseEntity<UserView> signUp(@RequestBody User user){
+    public ResponseEntity<UserView> signUp(@Valid @RequestBody User user){
         return ResponseEntity.ok(userService.signUp(user));
     }
     @GetMapping
@@ -36,5 +38,11 @@ public class UserController {
     public ResponseEntity<UserView> updateUser(@RequestBody User user,@PathVariable("userId") Long userId){
         UserView userView =userService.updateByID(userId,user);
         return ResponseEntity.ok(userView);
+    }
+
+    @PostMapping("/changePassword/{id}")
+    public ResponseEntity<String> changePassword(@RequestBody UserSecure userSecure,@PathVariable(name="id") Long id){
+        userService.changePassword(userSecure,id);
+        return ResponseEntity.ok("Password Changed Successfully");
     }
 }

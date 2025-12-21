@@ -8,18 +8,18 @@ public  class AuthUtil {
 
 
 
-    private final PasswordEncoder passwordEncoder;
+    private static PasswordEncoder passwordEncoder;
 
     public AuthUtil(PasswordEncoder passwordEncoder){
         this.passwordEncoder=passwordEncoder;
     }
 
 
-    public String encode(String password){
+    public static String encode(String password){
         return passwordEncoder.encode(password);
     }
 
-    public boolean matches(String rawPassword,String enocodedPassword){
+    public static boolean matches(String rawPassword,String enocodedPassword){
         return passwordEncoder.matches(rawPassword,enocodedPassword);
     }
 }

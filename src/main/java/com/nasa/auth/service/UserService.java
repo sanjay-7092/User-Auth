@@ -1,6 +1,7 @@
 package com.nasa.auth.service;
 
 import com.nasa.auth.DTO.User;
+import com.nasa.auth.DTO.UserSecure;
 import com.nasa.auth.DTO.UserView;
 import com.nasa.auth.Entity.UserEntity;
 import com.nasa.auth.Exception.InvalidUserExeption;
@@ -75,5 +76,19 @@ public class UserService{
     }
      public UserEntity findByUserName(String userName){
          return userRepository.findByEmail(userName).orElseThrow(() -> new InvalidUserExeption("User Not Found with the Email : {} "+ userName,""));
+    }
+
+    public void changePassword(UserSecure userSecure,Long id){
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(()->new InvalidUserExeption("AUTH-USER-004"));
+        if(!AuthUtil.matches(userSecure.getCurrentPassword(),userEntity.getPassword())){
+           throw new InvalidUserExeption("AUTH-LOGIN-001");
+        }
+        else{
+            if(AuthUtil.matches(userSecure.getNewPassword(),userEntity.getPassword())){
+                throw new InvalidUserExeption("New Password must be newer than old password","");
+            }
+            userEntity.setPassword(AuthUtil.encode(userSecure.getNewPassword()));
+            userRepository.save(userEntity);
+        }
     }
 }
