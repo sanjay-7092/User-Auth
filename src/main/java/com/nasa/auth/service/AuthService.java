@@ -28,7 +28,7 @@ public class AuthService {
             boolean isPasswordMatches = AuthUtil.matches(userLogin.getPassword(), userEntity.getPassword());
             if (isPasswordMatches) {
                     log.info("Password matches : returning the auth token");
-                    return JwtUtil.generateToken(userEntity.getEmail());
+                    return JwtUtil.generateToken(userEntity);
             } else{
                 log.error("password doesn't matches");
                 throw new UnAuthorizedAccessException("AUTH-LOGIN-001");

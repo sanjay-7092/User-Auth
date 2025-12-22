@@ -91,6 +91,14 @@ public class UserService{
          return userRepository.findByEmail(userName).orElseThrow(() -> new InvalidUserExeption("User Not Found with the Email : {} "+ userName,""));
     }
 
+    public void deleteUserById(Long id){
+        log.info("Delete the user by id");
+        if(!userRepository.existsById(id)){
+            throw new InvalidUserExeption("","User Not found");
+        }
+        userRepository.deleteById(id);
+    }
+
     public void changePassword(UserSecure userSecure,Long id){
         log.info("Changing the password for the user with the id : {}",id);
         UserEntity userEntity = userRepository.findById(id).orElseThrow(()->new InvalidUserExeption("AUTH-USER-004"));
