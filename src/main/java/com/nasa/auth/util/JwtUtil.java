@@ -20,9 +20,10 @@ public final class JwtUtil {
     private static final SecretKey secretKey = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
 
 
-    public static String generateToken(String userName){
+    public static String generateToken(UserEntity userEntity){
         return Jwts.builder()
-                .setSubject(userName)
+                .setSubject(userEntity.getEmail())
+                .claim("role",userEntity.getRole())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis()+1000*60*80))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
