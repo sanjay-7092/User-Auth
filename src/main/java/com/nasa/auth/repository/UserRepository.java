@@ -1,6 +1,6 @@
 package com.nasa.auth.repository;
 
-import com.nasa.auth.Entity.UserEntity;
+import com.nasa.auth.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

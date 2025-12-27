@@ -1,9 +1,9 @@
 package com.nasa.auth.service;
 
-import com.nasa.auth.DTO.UserLogin;
-import com.nasa.auth.Entity.UserEntity;
-import com.nasa.auth.Exception.InvalidUserExeption;
-import com.nasa.auth.Exception.UnAuthorizedAccessException;
+import com.nasa.auth.dto.UserLogin;
+import com.nasa.auth.entity.UserEntity;
+import com.nasa.auth.exception.InvalidUserExeption;
+import com.nasa.auth.exception.UnAuthorizedAccessException;
 import com.nasa.auth.util.AuthUtil;
 import com.nasa.auth.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;

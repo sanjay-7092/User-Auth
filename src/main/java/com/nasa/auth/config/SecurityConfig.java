@@ -1,6 +1,6 @@
 package com.nasa.auth.config;
 
-import com.nasa.auth.Filter.JwtTokenFilter;
+import com.nasa.auth.filter.JwtTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;

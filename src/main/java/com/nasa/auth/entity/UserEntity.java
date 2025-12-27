@@ -1,4 +1,4 @@
-package com.nasa.auth.Entity;
+package com.nasa.auth.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.nasa.auth.Exception;
+package com.nasa.auth.exception;
 
 public class InvalidUserExeption extends BaseException{
 

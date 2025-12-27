@@ -1,8 +1,8 @@
 package com.nasa.auth.mapper;
 
-import com.nasa.auth.DTO.User;
-import com.nasa.auth.DTO.UserView;
-import com.nasa.auth.Entity.UserEntity;
+import com.nasa.auth.dto.User;
+import com.nasa.auth.dto.UserView;
+import com.nasa.auth.entity.UserEntity;
 import org.mapstruct.Mapper;
 
 import java.util.List;

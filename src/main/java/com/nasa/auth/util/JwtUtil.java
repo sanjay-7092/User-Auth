@@ -2,9 +2,8 @@ package com.nasa.auth.util;
 
 import javax.crypto.SecretKey;
 
-import com.nasa.auth.Entity.UserEntity;
+import com.nasa.auth.entity.UserEntity;
 import com.nasa.auth.service.UserService;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -25,7 +24,7 @@ public final class JwtUtil {
                 .setSubject(userEntity.getEmail())
                 .claim("role",userEntity.getRole())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*80))
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*800))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
 
