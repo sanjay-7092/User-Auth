@@ -21,7 +21,7 @@ public class UserController {
         this.userService=userService;
     }
     @PostMapping("/sign-up")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN'")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<UserView> signUp(@Valid @RequestBody User user){
         return ResponseEntity.ok(userService.signUp(user));
     }
