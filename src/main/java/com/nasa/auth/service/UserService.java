@@ -1,10 +1,10 @@
 package com.nasa.auth.service;
 
-import com.nasa.auth.DTO.User;
-import com.nasa.auth.DTO.UserSecure;
-import com.nasa.auth.DTO.UserView;
-import com.nasa.auth.Entity.UserEntity;
-import com.nasa.auth.Exception.InvalidUserExeption;
+import com.nasa.auth.dto.User;
+import com.nasa.auth.dto.UserSecure;
+import com.nasa.auth.dto.UserView;
+import com.nasa.auth.entity.UserEntity;
+import com.nasa.auth.exception.InvalidUserExeption;
 import com.nasa.auth.util.AuthUtil;
 import com.nasa.auth.mapper.UserMapper;
 import com.nasa.auth.repository.UserRepository;

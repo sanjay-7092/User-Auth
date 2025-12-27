@@ -1,8 +1,8 @@
 package com.nasa.auth.controller;
 
-import com.nasa.auth.DTO.User;
-import com.nasa.auth.DTO.UserSecure;
-import com.nasa.auth.DTO.UserView;
+import com.nasa.auth.dto.User;
+import com.nasa.auth.dto.UserSecure;
+import com.nasa.auth.dto.UserView;
 import com.nasa.auth.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

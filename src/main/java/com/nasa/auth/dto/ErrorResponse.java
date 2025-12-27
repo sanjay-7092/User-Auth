@@ -1,4 +1,4 @@
-package com.nasa.auth.DTO;
+package com.nasa.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

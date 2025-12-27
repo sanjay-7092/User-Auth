@@ -1,6 +1,6 @@
 package com.nasa.auth.controller;
 
-import com.nasa.auth.DTO.UserLogin;
+import com.nasa.auth.dto.UserLogin;
 import com.nasa.auth.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

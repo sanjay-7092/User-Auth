@@ -1,6 +1,6 @@
-package com.nasa.auth.Filter;
+package com.nasa.auth.filter;
 
-import com.nasa.auth.Entity.UserEntity;
+import com.nasa.auth.entity.UserEntity;
 import com.nasa.auth.util.JwtUtil;
 import com.nasa.auth.service.UserService;
 import jakarta.servlet.FilterChain;

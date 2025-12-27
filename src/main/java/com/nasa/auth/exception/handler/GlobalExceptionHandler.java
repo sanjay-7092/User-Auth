@@ -1,9 +1,9 @@
-package com.nasa.auth.Exception.handler;
+package com.nasa.auth.exception.handler;
 
-import com.nasa.auth.DTO.ErrorResponse;
-import com.nasa.auth.Exception.BaseException;
-import com.nasa.auth.Exception.InvalidUserExeption;
-import com.nasa.auth.Exception.UnAuthorizedAccessException;
+import com.nasa.auth.dto.ErrorResponse;
+import com.nasa.auth.exception.BaseException;
+import com.nasa.auth.exception.InvalidUserExeption;
+import com.nasa.auth.exception.UnAuthorizedAccessException;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
