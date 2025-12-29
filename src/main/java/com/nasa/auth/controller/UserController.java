@@ -26,21 +26,21 @@ public class UserController {
         return ResponseEntity.ok(userService.signUp(user));
     }
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_VISOR','ROLE_OPERATOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_NASA_USER','ROLE_EXTERNAL_USER')")
     public ResponseEntity<List<UserView>> getAllUsers(){
         List<UserView> response = userService.getAllUsers();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{userId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_VISOR','ROLE_OPERATOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_NASA_USER','ROLE_EXTERNAL_USER')")
     public ResponseEntity<UserView> getByUserId(@PathVariable("userId") Long userId){
         UserView userView = userService.getByUserId(userId);
         return ResponseEntity.ok(userView);
     }
 
     @PutMapping("/{userId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_VISOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_NASA_USER')")
     public ResponseEntity<UserView> updateUser(@RequestBody User user,@PathVariable("userId") Long userId){
         UserView userView =userService.updateByID(userId,user);
         return ResponseEntity.ok(userView);
@@ -53,7 +53,7 @@ public class UserController {
         return ResponseEntity.ok("User Deleted Successfully");
     }
     @PostMapping("/change-password/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_OPERATOR')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_NASA_USER')")
     public ResponseEntity<String> changePassword(@RequestBody UserSecure userSecure,@PathVariable(name="id") Long id){
         userService.changePassword(userSecure,id);
         return ResponseEntity.ok("Password Changed Successfully");

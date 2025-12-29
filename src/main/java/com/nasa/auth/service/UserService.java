@@ -1,8 +1,10 @@
 package com.nasa.auth.service;
 
+import com.nasa.auth.dto.Role;
 import com.nasa.auth.dto.User;
 import com.nasa.auth.dto.UserSecure;
 import com.nasa.auth.dto.UserView;
+import com.nasa.auth.entity.RoleEntity;
 import com.nasa.auth.entity.UserEntity;
 import com.nasa.auth.exception.InvalidUserExeption;
 import com.nasa.auth.util.AuthUtil;
@@ -12,7 +14,10 @@ import com.nasa.auth.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -20,9 +25,11 @@ public class UserService{
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    UserService(UserRepository userRepository, UserMapper userMapper){
+    private final RoleService roleService;
+    UserService(UserRepository userRepository, UserMapper userMapper,RoleService roleService){
         this.userRepository=userRepository;
         this.userMapper=userMapper;
+        this.roleService=roleService;
     }
     public UserView signUp(User user){
         try {
@@ -40,6 +47,7 @@ public class UserService{
                     throw new InvalidUserExeption("AUTH-USER-003");
                 }
                 UserEntity newUser = userMapper.toEntity(user);
+                handleRoles(newUser,user.getRoles());
                 newUser.setPassword(AuthUtil.encode(newUser.getPassword()));
                 UserEntity userResponse = userRepository.save(newUser);
                 log.info("User was successfully created");
@@ -55,6 +63,16 @@ public class UserService{
     }
     private boolean isInValidUser(User user){
         return StringUtil.isEmpty(user.getEmail()) || StringUtil.isEmpty(user.getPassword()) || StringUtil.isEmpty(user.getFirstName()) ||StringUtil.isEmpty(user.getConfirmPassword());
+    }
+    private void handleRoles(UserEntity userEntity, Set<Role> roles){
+        Set<RoleEntity> roleEntities = new HashSet<>();
+        for(Role role:roles){
+            Optional<RoleEntity> roleEntity = roleService.getRoleEntityById(role.getId());
+            if(roleEntity.isPresent()){
+                roleEntities.add(roleEntity.get());
+            }
+        }
+        userEntity.setRoles(roleEntities);
     }
 
     public List<UserView> getAllUsers(){
@@ -77,11 +95,11 @@ public class UserService{
             UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new InvalidUserExeption("AUTH-USER-004"));
             userEntity.setDob(user.getDob());
             userEntity.setEmail(user.getEmail());
-            userEntity.setRole(user.getRole());
             userEntity.setContactNumber(user.getContactNumber());
             userEntity.setIsActive(user.getIsActive());
             userEntity.setFirstName(user.getFirstName());
             userEntity.setLastName(user.getLastName());
+            handleRoles(userEntity,user.getRoles());
             UserEntity updated = userRepository.save(userEntity);
             log.info("Successfully updated the user");
             return userMapper.toUserViewDto(updated);

@@ -5,7 +5,6 @@ import com.nasa.auth.dto.Role;
 import com.nasa.auth.entity.PermissionEntity;
 import com.nasa.auth.entity.RoleEntity;
 import com.nasa.auth.exception.RoleErrorException;
-import com.nasa.auth.mapper.PermissionsMapper;
 import com.nasa.auth.mapper.RoleMapper;
 import com.nasa.auth.repository.PermissionRepository;
 import com.nasa.auth.repository.RoleRepository;
@@ -24,12 +23,10 @@ public class RoleService {
 
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
-    private final PermissionsMapper permissionsMapper;
     private final PermissionRepository permissionRepository;
-    protected RoleService(RoleRepository roleRepository, RoleMapper roleMapper, PermissionsMapper permissionsMapper,PermissionRepository permissionRepository){
+    protected RoleService(RoleRepository roleRepository, RoleMapper roleMapper,PermissionRepository permissionRepository){
         this.roleRepository=roleRepository;
         this.roleMapper=roleMapper;
-        this.permissionsMapper=permissionsMapper;
         this.permissionRepository=permissionRepository;
     }
 
@@ -44,8 +41,11 @@ public class RoleService {
     }
 
     public Role getById(Long id){
-        log.info("Retrive the role by id");
-        return roleMapper.toDto(roleRepository.findById(id).orElseThrow(()-> new RoleErrorException("ROLE-002","No ROle found with the id")));
+        log.info("Reterive the role by id");
+        return roleMapper.toDto(getRoleEntityById(id).orElseThrow(()-> new RoleErrorException("ROLE-002","No ROle found with the id")));
+    }
+    Optional<RoleEntity> getRoleEntityById(Long id){
+        return roleRepository.findById(id);
     }
     public Role create(Role role){
         log.info("Creating the Role of : {}",role.getName());
