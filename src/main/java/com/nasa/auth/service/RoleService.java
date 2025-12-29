@@ -1,5 +1,6 @@
 package com.nasa.auth.service;
 
+import com.nasa.auth.dto.Permission;
 import com.nasa.auth.dto.Role;
 import com.nasa.auth.entity.PermissionEntity;
 import com.nasa.auth.entity.RoleEntity;
@@ -54,7 +55,7 @@ public class RoleService {
         }
         RoleEntity currentEntity = roleMapper.toEntity(role);
         if(currentEntity.getPermissions()!=null) {
-            handlePermissions(currentEntity);
+            handlePermissions(role.getPermissions(),currentEntity);
         }
         return roleMapper.toDto(roleRepository.save(currentEntity));
     }
@@ -65,18 +66,17 @@ public class RoleService {
                         new RoleErrorException("ROLE-001","Role name Already exists"));
         roleEntity.setName(role.getName());
         roleEntity.setDescription(role.getDescription());
-        roleEntity.setPermissions(permissionsMapper.toEntityList(role.getPermissions()));
         if(roleEntity.getPermissions()!=null) {
-            handlePermissions(roleEntity);
+            handlePermissions(role.getPermissions(),roleEntity);
         }
         return roleMapper.toDto(roleRepository.save(roleEntity));
     }
 
-    private void handlePermissions(RoleEntity roleEntity){
+    private void handlePermissions(Set<Permission> permissions,RoleEntity roleEntity){
         Set<PermissionEntity> permissionEntities = new HashSet<>();
-        for(PermissionEntity permissionEntity: roleEntity.getPermissions()){
-            if(permissionEntity.getId()!=null) {
-                Optional<PermissionEntity> current = permissionRepository.findById(permissionEntity.getId());
+        for(Permission permission: permissions){
+            if(permission.getId()!=null) {
+                Optional<PermissionEntity> current = permissionRepository.findById(permission.getId());
                 if(current.isPresent()){
                     permissionEntities.add(current.get());
                 }

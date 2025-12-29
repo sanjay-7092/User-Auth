@@ -3,6 +3,7 @@ package com.nasa.auth.exception.handler;
 import com.nasa.auth.dto.ErrorResponse;
 import com.nasa.auth.exception.BaseException;
 import com.nasa.auth.exception.InvalidUserExeption;
+import com.nasa.auth.exception.RoleErrorException;
 import com.nasa.auth.exception.UnAuthorizedAccessException;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class GlobalExceptionHandler {
         this.messageSource=messageSource;
     }
 
-    @ExceptionHandler(value ={ InvalidUserExeption.class, UnAuthorizedAccessException.class})
+    @ExceptionHandler(value ={ InvalidUserExeption.class, UnAuthorizedAccessException.class, RoleErrorException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleInvalidUserException(BaseException baseException){
         return this.getErrorResponse(baseException);
