@@ -28,7 +28,6 @@ public class RoleController {
         return ResponseEntity.ok(roleService.getById(id));
     }
     @PostMapping
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_SUPER_VISOR','ROLE_OPERATOR')")
     public ResponseEntity<Role> create(@RequestBody Role role){
         return ResponseEntity.ok(roleService.create(role));
     }
