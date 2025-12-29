@@ -19,25 +19,30 @@ public class RoleController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_NASA_USER','ROLE_EXTERNAL_USER')")
     public ResponseEntity<List<Role>> getAll(){
         return ResponseEntity.ok(roleService.getAll());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_NASA_USER','ROLE_EXTERNAL_USER')")
     public ResponseEntity<Role> getById(@PathVariable Long id){
         return ResponseEntity.ok(roleService.getById(id));
     }
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<Role> create(@RequestBody Role role){
         return ResponseEntity.ok(roleService.create(role));
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_NASA_USER')")
     public ResponseEntity<Role> updateById(@RequestBody Role role, @PathVariable Long id){
         return ResponseEntity.ok(roleService.updateById(role,id));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteById(@PathVariable Long id){
         roleService.delete(id);
         return ResponseEntity.ok("Deleted Successfully");
