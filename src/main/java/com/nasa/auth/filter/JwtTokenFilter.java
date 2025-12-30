@@ -2,6 +2,7 @@ package com.nasa.auth.filter;
 
 import com.nasa.auth.dto.User;
 import com.nasa.auth.util.JwtUtil;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.security.SignatureException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,13 +29,18 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         String token = request.getHeader("Authorization");
         if(token!=null && SecurityContextHolder.getContext().getAuthentication()==null){
-            boolean validUser = JwtUtil.validateToken(token);
-            if(validUser){
-                User user = JwtUtil.extractUser(token);
-                Collection<GrantedAuthority> authorities =getAuthorities(token);
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,null,authorities);
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            try {
+                boolean validUser = JwtUtil.validateToken(token);
+                if (validUser) {
+                    User user = JwtUtil.extractUser(token);
+                    Collection<GrantedAuthority> authorities = getAuthorities(token);
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, authorities);
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }catch(JwtException | IllegalArgumentException ex){
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+                throw ex;
             }
         }
         filterChain.doFilter(request,response);
