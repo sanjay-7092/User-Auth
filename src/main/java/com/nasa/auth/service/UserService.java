@@ -12,6 +12,9 @@ import com.nasa.auth.mapper.UserMapper;
 import com.nasa.auth.repository.UserRepository;
 import com.nasa.auth.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -85,11 +88,13 @@ public class UserService{
         return userMapper.toAllUserViewDtos(userEntities);
     }
 
+    @Cacheable(cacheNames = "user",key = "#id")
     public UserView getByUserId(Long id){
         log.info("Fetching the user with the id : {}",id);
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->new InvalidUserExeption("AUTH-USER-004"));
         return userMapper.toUserViewDto(userEntity);
     }
+    @CachePut(cacheNames = "user",key="#id")
     public UserView updateByID(Long id,User user) {
             log.info("Updating the user with the id : {}",id);
             UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new InvalidUserExeption("AUTH-USER-004"));
@@ -109,6 +114,7 @@ public class UserService{
          return userRepository.findByEmail(userName).orElseThrow(() -> new InvalidUserExeption("User Not Found with the Email : {} "+ userName,""));
     }
 
+    @CacheEvict(cacheNames = "user",key="#id")
     public void deleteUserById(Long id){
         log.info("Delete the user by id");
         if(!userRepository.existsById(id)){

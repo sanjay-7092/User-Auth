@@ -9,6 +9,9 @@ import com.nasa.auth.mapper.RoleMapper;
 import com.nasa.auth.repository.PermissionRepository;
 import com.nasa.auth.repository.RoleRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -39,7 +42,7 @@ public class RoleService {
         }
         return roleMapper.toDtoList(roleEntities);
     }
-
+    @Cacheable(cacheNames = "role", key="#id")
     public Role getById(Long id){
         log.info("Reterive the role by id");
         return roleMapper.toDto(getRoleEntityById(id).orElseThrow(()-> new RoleErrorException("ROLE-002","No ROle found with the id")));
@@ -60,6 +63,7 @@ public class RoleService {
         return roleMapper.toDto(roleRepository.save(currentEntity));
     }
 
+    @CachePut(cacheNames = "role",key="#id")
     public Role updateById(Role role,Long id){
         RoleEntity roleEntity =roleRepository.findById(id)
                 .orElseThrow(() ->
@@ -84,6 +88,7 @@ public class RoleService {
         }
         roleEntity.setPermissions(permissionEntities);
     }
+    @CacheEvict(cacheNames = "role",key="#id")
     public void delete(Long id){
         RoleEntity roleEntity = roleRepository.findById(id)
                 .orElseThrow(()-> new RoleErrorException("ROLE-001","Role Doesn't exist"));

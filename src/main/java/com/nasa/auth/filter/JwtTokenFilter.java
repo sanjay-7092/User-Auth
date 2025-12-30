@@ -2,6 +2,7 @@ package com.nasa.auth.filter;
 
 import com.nasa.auth.dto.User;
 import com.nasa.auth.util.JwtUtil;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,13 +28,18 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         String token = request.getHeader("Authorization");
         if(token!=null && SecurityContextHolder.getContext().getAuthentication()==null){
-            boolean validUser = JwtUtil.validateToken(token);
-            if(validUser){
-                User user = JwtUtil.extractUser(token);
-                Collection<GrantedAuthority> authorities =getAuthorities(token);
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,null,authorities);
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            try {
+                boolean validUser = JwtUtil.validateToken(token);
+                if (validUser) {
+                    User user = JwtUtil.extractUser(token);
+                    Collection<GrantedAuthority> authorities = getAuthorities(token);
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, authorities);
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }catch(JwtException | IllegalArgumentException ex){
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+                throw ex;
             }
         }
         filterChain.doFilter(request,response);
