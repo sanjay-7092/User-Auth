@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -42,6 +43,18 @@ public class GlobalExceptionHandler {
             message = fieldError.getDefaultMessage();
         }
         return new ErrorResponse("",message,LocalDateTime.now());
+    }
+
+    @ExceptionHandler(value= ResponseStatusException.class)
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    public ErrorResponse handleResponseStatusException(ResponseStatusException responseStatusException){
+        return new ErrorResponse("NASA-422", responseStatusException.getReason(), LocalDateTime.now());
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleException(Exception e){
+        return new ErrorResponse("404", e.getMessage(),LocalDateTime.now());
     }
 
    private ErrorResponse getErrorResponse(BaseException baseException){

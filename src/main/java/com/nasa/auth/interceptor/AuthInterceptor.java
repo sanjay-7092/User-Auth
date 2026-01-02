@@ -12,7 +12,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpRequest, HttpServletResponse httpResponse, Object handler) throws Exception{
-        log.info("Entering into the Controller");
         return true;
     }
 }

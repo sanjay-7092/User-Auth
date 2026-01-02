@@ -1,5 +1,6 @@
 package com.nasa.auth.controller;
 
+import com.nasa.auth.annotation.RateLimit;
 import com.nasa.auth.dto.User;
 import com.nasa.auth.dto.UserSecure;
 import com.nasa.auth.dto.UserView;
@@ -27,6 +28,7 @@ public class UserController {
     }
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_NASA_USER','ROLE_EXTERNAL_USER')")
+    @RateLimit(limit = 10, windowSeconds = 60)
     public ResponseEntity<List<UserView>> getAllUsers(){
         List<UserView> response = userService.getAllUsers();
         return ResponseEntity.ok(response);

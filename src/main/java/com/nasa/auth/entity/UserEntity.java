@@ -15,22 +15,32 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name="user_id")
+    private String userId;
+
     @Column(name="lastname")
     private String lastName;
+
     @Column(name="firstname")
     private String firstName;
+
     @Column(name="email")
     private String email;
+
     @Column(name="contact_no")
     private String contactNumber;
+
     @Column(name="dob")
     private LocalDate dob;
+
     @Column(name="password")
     private String password;
+
     @Column(name="active")
     private Boolean isActive;
-    @Column(name="roles")
 
+    @Column(name="roles")
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name="user_role",
