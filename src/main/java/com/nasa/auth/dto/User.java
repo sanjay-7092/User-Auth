@@ -21,6 +21,7 @@ public class User {
     private String email;
     @Size(min=10, max=10, message="Invalid contact Number")
     private String contactNumber;
+    private String userId;
     private Set<Role> roles;
     private LocalDate dob;
     @Size(min=8, max=15, message="Password must be 8–15 chars")

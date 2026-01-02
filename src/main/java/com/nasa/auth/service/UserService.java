@@ -103,6 +103,7 @@ public class UserService{
             userEntity.setContactNumber(user.getContactNumber());
             userEntity.setIsActive(user.getIsActive());
             userEntity.setFirstName(user.getFirstName());
+            userEntity.setUserId(user.getUserId());
             userEntity.setLastName(user.getLastName());
             handleRoles(userEntity,user.getRoles());
             UserEntity updated = userRepository.save(userEntity);

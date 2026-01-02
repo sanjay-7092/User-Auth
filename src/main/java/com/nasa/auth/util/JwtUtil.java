@@ -27,6 +27,7 @@ public final class JwtUtil {
         return Jwts.builder()
                 .setSubject(userEntity.getEmail())
                 .claim("roles",mergeRoles(userEntity.getRoles()))
+                .claim("userId",userEntity.getUserId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis()+1000*60*800))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
@@ -49,6 +50,7 @@ public final class JwtUtil {
     public static User extractUser(String token){
         User user =new User();
         Claims claims= extractClaims(token);
+        user.setUserId(claims.get("userId",String.class));
         user.setEmail(claims.getSubject());
         return user;
     }
